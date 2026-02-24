@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+п»їusing System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 namespace lab1
@@ -24,7 +24,7 @@ namespace lab1
             SendMessage(progressBarSpeedAttack_player.Handle, 0x0410, (IntPtr)0, IntPtr.Zero);
             SendMessage(progressBarSpeedAttack_enemy.Handle, 0x0410, (IntPtr)0, IntPtr.Zero);
 
-            // Привязываем событие таймера
+            // РџСЂРёРІСЏР·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ С‚Р°Р№РјРµСЂР°
             timer1.Interval = 30;
             timer1.Tick += timer1_Tick;
             timer1.Start();
@@ -45,7 +45,7 @@ namespace lab1
 
             init_PB();
 
-            richTextBox1.AppendText($"Бой между {player.Name} и {enemy.Name} начался\n");
+            richTextBox1.AppendText($"Р‘РѕР№ РјРµР¶РґСѓ {player.Name} Рё {enemy.Name} РЅР°С‡Р°Р»СЃСЏ\n");
             richTextBox1.ScrollToCaret();
 
         }
@@ -64,7 +64,7 @@ namespace lab1
 
             init_PB();
 
-            richTextBox1.AppendText($"Бой между {player.Name} и {enemy.Name} начался\n");
+            richTextBox1.AppendText($"Р‘РѕР№ РјРµР¶РґСѓ {player.Name} Рё {enemy.Name} РЅР°С‡Р°Р»СЃСЏ\n");
             richTextBox1.ScrollToCaret();
         }
 
@@ -82,7 +82,7 @@ namespace lab1
 
             init_PB();
 
-            richTextBox1.AppendText($"Бой между {player.Name} и {enemy.Name} начался\n");
+            richTextBox1.AppendText($"Р‘РѕР№ РјРµР¶РґСѓ {player.Name} Рё {enemy.Name} РЅР°С‡Р°Р»СЃСЏ\n");
             richTextBox1.ScrollToCaret();
         }
 
@@ -91,19 +91,19 @@ namespace lab1
             progressBarSpeedAttack_player.Value = 0;
             Attack_batton.Enabled = false;
             Attack_batton.Font = new Font("Courier New", 20F, FontStyle.Bold);
-            Attack_batton.Text = "Перезарядка";
+            Attack_batton.Text = "РџРµСЂРµР·Р°СЂСЏРґРєР°";
 
-            // Шанс 10% на суперспособность игрока
+            // РЁР°РЅСЃ 10% РЅР° СЃСѓРїРµСЂСЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РёРіСЂРѕРєР°
             if (random.Next(1, 101) <= 10)
             {
                 richTextBox1.AppendText(player.useAbility());
             }
 
-            // Шанс 45% на случайный блок врага
+            // РЁР°РЅСЃ 45% РЅР° СЃР»СѓС‡Р°Р№РЅС‹Р№ Р±Р»РѕРє РІСЂР°РіР°
             if (random.Next(1, 101) <= 45)
             {
                 enemy.IsBlocking = true;
-                richTextBox1.AppendText($"[{enemy.Name}] инстинктивно закрывается!\n");
+                richTextBox1.AppendText($"[{enemy.Name}] РёРЅСЃС‚РёРЅРєС‚РёРІРЅРѕ Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ!\n");
             }
             richTextBox1.AppendText(player.attack(enemy));
             UpdateUI();
@@ -111,12 +111,12 @@ namespace lab1
             if (enemy.Health <= 0)
             {
                 timer1.Stop();
-                label10.Text = "ПОБЕДА!!!!!!!";
+                label10.Text = "РџРћР‘Р•Р”Рђ!!!!!!!";
                 label10.ForeColor = Color.Orange;
                 label10.BackColor = Color.Red;
                 panel3.BackColor = Color.Red;
                 panel3.Visible = true;
-                //MessageBox.Show("Победа!");
+                //MessageBox.Show("РџРѕР±РµРґР°!");
             }
         }
 
@@ -125,17 +125,17 @@ namespace lab1
         {
             progressBarSpeedAttack_enemy.Value = 0;
 
-            // Шанс 15% на способность врага
+            // РЁР°РЅСЃ 15% РЅР° СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РІСЂР°РіР°
             if (random.Next(1, 101) <= 10)
             {
                 richTextBox1.AppendText(enemy.useAbility());
             }
 
-            // Шанс 25% на случайный блок игрока
+            // РЁР°РЅСЃ 25% РЅР° СЃР»СѓС‡Р°Р№РЅС‹Р№ Р±Р»РѕРє РёРіСЂРѕРєР°
             if (random.Next(1, 101) <= 25)
             {
                 player.IsBlocking = true;
-                richTextBox1.AppendText($"[{player.Name}] инстинктивно группируется!\n");
+                richTextBox1.AppendText($"[{player.Name}] РёРЅСЃС‚РёРЅРєС‚РёРІРЅРѕ РіСЂСѓРїРїРёСЂСѓРµС‚СЃСЏ!\n");
             }
 
             richTextBox1.AppendText(enemy.attack(player));
@@ -144,12 +144,12 @@ namespace lab1
             if (player.Health <= 0)
             {
                 timer1.Stop();
-                label10.Text = "ВЫ ПРОИГРАЛИ!";
+                label10.Text = "Р’Р« РџР РћРР“Р РђР›Р!";
                 label10.ForeColor = Color.Orange;
                 label10.BackColor = Color.Red;
                 panel3.BackColor = Color.Red;
                 panel3.Visible = true;
-                //MessageBox.Show("Вы проиграли...");
+                //MessageBox.Show("Р’С‹ РїСЂРѕРёРіСЂР°Р»Рё...");
             }
         }
 
@@ -165,11 +165,11 @@ namespace lab1
             richTextBox1.ScrollToCaret();
         }
 
-        // Проверка границ ProgressBar
+        // РџСЂРѕРІРµСЂРєР° РіСЂР°РЅРёС† ProgressBar
         private void SetBar(ProgressBar pb, int val)
         {
             if (val < 0) val = 0;
-            if (val > pb.Maximum) pb.Maximum = val; // Если подлечились выше максимума — расширяем полоску
+            if (val > pb.Maximum) pb.Maximum = val; // Р•СЃР»Рё РїРѕРґР»РµС‡РёР»РёСЃСЊ РІС‹С€Рµ РјР°РєСЃРёРјСѓРјР° вЂ” СЂР°СЃС€РёСЂСЏРµРј РїРѕР»РѕСЃРєСѓ
 
             if (val < pb.Maximum) pb.Value = val + 1;
             pb.Value = val;
@@ -200,14 +200,14 @@ namespace lab1
             if (player == null || enemy == null || player.Health <= 0 || enemy.Health <= 0)
                 return;
 
-            // прогресс бар ИГРОК
+            // РїСЂРѕРіСЂРµСЃСЃ Р±Р°СЂ РР“Р РћРљ
             if (progressBarSpeedAttack_player.Value < progressBarSpeedAttack_player.Maximum)
             {
                 int newPlayerValue = progressBarSpeedAttack_player.Value + player.SpeedAttack;
                 progressBarSpeedAttack_player.Value = Math.Min(newPlayerValue, progressBarSpeedAttack_player.Maximum);
             }
 
-            // Включаем кнопку, когда шкала игрока заполнилась
+            // Р’РєР»СЋС‡Р°РµРј РєРЅРѕРїРєСѓ, РєРѕРіРґР° С€РєР°Р»Р° РёРіСЂРѕРєР° Р·Р°РїРѕР»РЅРёР»Р°СЃСЊ
             if (progressBarSpeedAttack_player.Value >= progressBarSpeedAttack_player.Maximum)
             {
                 if (!Attack_batton.Enabled)
@@ -215,18 +215,18 @@ namespace lab1
                     Attack_batton.Enabled = true;
                     Attack_batton.ForeColor = Color.LightSalmon;
                     Attack_batton.Font = new Font("Courier New", 20F, FontStyle.Bold);
-                    Attack_batton.Text = "АТАКА!";
+                    Attack_batton.Text = "РђРўРђРљРђ!";
                 }
             }
 
-            // прогресс бар ВРАГА
+            // РїСЂРѕРіСЂРµСЃСЃ Р±Р°СЂ Р’Р РђР“Рђ
             if (progressBarSpeedAttack_enemy.Value < progressBarSpeedAttack_enemy.Maximum)
             {
                 int newEnemyValue = progressBarSpeedAttack_enemy.Value + enemy.SpeedAttack;
                 progressBarSpeedAttack_enemy.Value = Math.Min(newEnemyValue, progressBarSpeedAttack_enemy.Maximum);
             }
 
-            // Если шкала врага заполнилась он ударяет
+            // Р•СЃР»Рё С€РєР°Р»Р° РІСЂР°РіР° Р·Р°РїРѕР»РЅРёР»Р°СЃСЊ РѕРЅ СѓРґР°СЂСЏРµС‚
             if (progressBarSpeedAttack_enemy.Value >= progressBarSpeedAttack_enemy.Maximum)
             {
                 EnemyAttack();
@@ -260,7 +260,7 @@ namespace lab1
             timer1.Start();
         }
 
-        // класс Персонажа
+        // РєР»Р°СЃСЃ РџРµСЂСЃРѕРЅР°Р¶Р°
         public abstract class Character
         {
             public string Name { get; set; }
@@ -268,7 +268,6 @@ namespace lab1
             public int AttackPower { get; set; }
             public int Defense { get; set; }
             public int SpeedAttack { get; set; }
-
             public bool IsBlocking { get; set; } = false;
             public Character(string name, int health, int attackPower, int defense, int speedAtteck)
             {
@@ -287,54 +286,54 @@ namespace lab1
                 int incomingDamage = damage;
                 string log = "";
 
-                // блок
+                // Р±Р»РѕРє
                 if (IsBlocking)
                 {
-                    incomingDamage /= 2; // Урон режем в 2 раза
-                    log += "[БЛОК! Урон снижен] ";
+                    incomingDamage /= 2; // РЈСЂРѕРЅ СЂРµР¶РµРј РІ 2 СЂР°Р·Р°
+                    log += "[Р‘Р›РћРљ! РЈСЂРѕРЅ СЃРЅРёР¶РµРЅ] ";
                     IsBlocking = false;
                 }
 
-                // Урон идет в Броню
+                // РЈСЂРѕРЅ РёРґРµС‚ РІ Р‘СЂРѕРЅСЋ
                 if (Defense > 0)
                 {
                     if (Defense >= incomingDamage)
                     {
                         Defense -= incomingDamage;
-                        log += $"Броня поглотила {incomingDamage} урона!\n";
+                        log += $"Р‘СЂРѕРЅСЏ РїРѕРіР»РѕС‚РёР»Р° {incomingDamage} СѓСЂРѕРЅР°!\n";
                         return log;
                     }
                     else
                     {
                         int remainingDamage = incomingDamage - Defense;
-                        log += $"Броня пробита! (Поглощено {Defense} урона). ";
+                        log += $"Р‘СЂРѕРЅСЏ РїСЂРѕР±РёС‚Р°! (РџРѕРіР»РѕС‰РµРЅРѕ {Defense} СѓСЂРѕРЅР°). ";
                         Defense = 0;
-                        Health -= remainingDamage; // Остаток летит в HP
+                        Health -= remainingDamage; // РћСЃС‚Р°С‚РѕРє Р»РµС‚РёС‚ РІ HP
                         if (Health < 0) Health = 0;
-                        log += $"Здоровье потеряло {remainingDamage} HP!\n";
+                        log += $"Р—РґРѕСЂРѕРІСЊРµ РїРѕС‚РµСЂСЏР»Рѕ {remainingDamage} HP!\n";
                         return log;
                     }
                 }
-                //  Если брони нет, урон идет напрямую в HP
+                //  Р•СЃР»Рё Р±СЂРѕРЅРё РЅРµС‚, СѓСЂРѕРЅ РёРґРµС‚ РЅР°РїСЂСЏРјСѓСЋ РІ HP
                 else
                 {
                     Health -= incomingDamage;
                     if (Health < 0) Health = 0;
-                    log += $"Получено {incomingDamage} урона здоровью!\n";
+                    log += $"РџРѕР»СѓС‡РµРЅРѕ {incomingDamage} СѓСЂРѕРЅР° Р·РґРѕСЂРѕРІСЊСЋ!\n";
                     return log;
                 }
             }
 
         }
-        // дочений класс Воин
+        // РґРѕС‡РµРЅРёР№ РєР»Р°СЃСЃ Р’РѕРёРЅ
         public class Warrior : Character
         {
-            public Warrior() : base("Воин", 240, 42, 130, 3)
+            public Warrior() : base("Р’РѕРёРЅ", 240, 42, 130, 3)
             {
             }
             public override string attack(Character Object_Enemy)
             {
-                string result = $"{Name} бьет топором! {Object_Enemy.TakeDamage(AttackPower)}\n";
+                string result = $"{Name} Р±СЊРµС‚ С‚РѕРїРѕСЂРѕРј! {Object_Enemy.TakeDamage(AttackPower)}\n";
 
                 return result;
             }
@@ -343,21 +342,21 @@ namespace lab1
             {
                 int Ability_num = 25;
                 Health += Ability_num;
-                string result = $"Стработала суперсопсобность, Воин получил + {Ability_num}!\n";
+                string result = $"РЎС‚СЂР°Р±РѕС‚Р°Р»Р° СЃСѓРїРµСЂСЃРѕРїСЃРѕР±РЅРѕСЃС‚СЊ, Р’РѕРёРЅ РїРѕР»СѓС‡РёР» + {Ability_num}!\n";
 
                 return result;
             }
 
         }
-        // дочений класс Лучник 
+        // РґРѕС‡РµРЅРёР№ РєР»Р°СЃСЃ Р›СѓС‡РЅРёРє 
         public class Archer : Character
         {
-            public Archer() : base("Лучник", 190, 30, 110, 6)
+            public Archer() : base("Р›СѓС‡РЅРёРє", 190, 30, 110, 6)
             {
             }
             public override string attack(Character Object_Enemy)
             {
-                string result = $"{Name} попадает из лука! {Object_Enemy.TakeDamage(AttackPower)}\n";
+                string result = $"{Name} РїРѕРїР°РґР°РµС‚ РёР· Р»СѓРєР°! {Object_Enemy.TakeDamage(AttackPower)}\n";
 
                 return result;
             }
@@ -366,23 +365,23 @@ namespace lab1
             {
                 int attackPower_num = 20;
                 AttackPower += attackPower_num;
-                string result = $"У {Name} Стработала суперсопсобность, его урон увеличен на {attackPower_num}!\n";
+                string result = $"РЈ {Name} РЎС‚СЂР°Р±РѕС‚Р°Р»Р° СЃСѓРїРµСЂСЃРѕРїСЃРѕР±РЅРѕСЃС‚СЊ, РµРіРѕ СѓСЂРѕРЅ СѓРІРµР»РёС‡РµРЅ РЅР° {attackPower_num}!\n";
 
                 return result;
             }
 
         }
 
-        // дочений класс Мечник
+        // РґРѕС‡РµРЅРёР№ РєР»Р°СЃСЃ РњРµС‡РЅРёРє
         public class Swordsman : Character
         {
-            public Swordsman() : base("Мечник", 220, 40, 125, 4)
+            public Swordsman() : base("РњРµС‡РЅРёРє", 220, 40, 125, 4)
             {
 
             }
             public override string attack(Character Object_Enemy)
             {
-                string result = $"{Name} бьет мечем противника! {Object_Enemy.TakeDamage(AttackPower)}\n";
+                string result = $"{Name} Р±СЊРµС‚ РјРµС‡РµРј РїСЂРѕС‚РёРІРЅРёРєР°! {Object_Enemy.TakeDamage(AttackPower)}\n";
 
                 return result;
             }
@@ -391,7 +390,7 @@ namespace lab1
             {
                 int SpeedAttack_num = 2;
                 SpeedAttack += SpeedAttack_num;
-                string result = $"У {Name} Стработала суперсопсобность, скорость его атаки теперь составляет {SpeedAttack}!\n";
+                string result = $"РЈ {Name} РЎС‚СЂР°Р±РѕС‚Р°Р»Р° СЃСѓРїРµСЂСЃРѕРїСЃРѕР±РЅРѕСЃС‚СЊ, СЃРєРѕСЂРѕСЃС‚СЊ РµРіРѕ Р°С‚Р°РєРё С‚РµРїРµСЂСЊ СЃРѕСЃС‚Р°РІР»СЏРµС‚ {SpeedAttack}!\n";
 
                 return result;
             }
@@ -400,12 +399,12 @@ namespace lab1
 
         public class Enemy : Character
         {
-            public Enemy() : base("Враг", 215, 33, 115, 3)
+            public Enemy() : base("Р’СЂР°Рі", 215, 33, 115, 3)
             {
             }
             public override string attack(Character Object_Enemy)
             {
-                string result = $"{Name} наносит удар! {Object_Enemy.TakeDamage(AttackPower)}";
+                string result = $"{Name} РЅР°РЅРѕСЃРёС‚ СѓРґР°СЂ! {Object_Enemy.TakeDamage(AttackPower)}";
 
                 return result;
             }
@@ -418,7 +417,7 @@ namespace lab1
                 Health += Ability_num;
                 SpeedAttack += SpeedAttack_num;
 
-                string result = $"У {Name} Стработала суперсопсобность, скорость его атаки теперь составляет {SpeedAttack} и еще у него повысилось здоровье на {Ability_num}, теперь его не победить!\n";
+                string result = $"РЈ {Name} РЎС‚СЂР°Р±РѕС‚Р°Р»Р° СЃСѓРїРµСЂСЃРѕРїСЃРѕР±РЅРѕСЃС‚СЊ, СЃРєРѕСЂРѕСЃС‚СЊ РµРіРѕ Р°С‚Р°РєРё С‚РµРїРµСЂСЊ СЃРѕСЃС‚Р°РІР»СЏРµС‚ {SpeedAttack} Рё РµС‰Рµ Сѓ РЅРµРіРѕ РїРѕРІС‹СЃРёР»РѕСЃСЊ Р·РґРѕСЂРѕРІСЊРµ РЅР° {Ability_num}, С‚РµРїРµСЂСЊ РµРіРѕ РЅРµ РїРѕР±РµРґРёС‚СЊ!\n";
 
                 return result;
             }
@@ -427,14 +426,14 @@ namespace lab1
 
         }
 
-        // Фабрика 
+        // Р¤Р°Р±СЂРёРєР° 
         public abstract class Creator
         {
             public abstract Character createCharacter();
 
         }
 
-        // создатель война
+        // СЃРѕР·РґР°С‚РµР»СЊ РІРѕР№РЅР°
         public class WarriorCreator : Creator
         {
             public override Character createCharacter()
@@ -443,7 +442,7 @@ namespace lab1
             }
         }
 
-        // создатель лучника
+        // СЃРѕР·РґР°С‚РµР»СЊ Р»СѓС‡РЅРёРєР°
         public class ArcherCreator : Creator
         {
             public override Character createCharacter()
@@ -452,7 +451,7 @@ namespace lab1
             }
         }
 
-        // создатель мечника
+        // СЃРѕР·РґР°С‚РµР»СЊ РјРµС‡РЅРёРєР°
         public class SwordsmanCreator : Creator
         {
             public override Character createCharacter()
@@ -461,7 +460,7 @@ namespace lab1
             }
         }
 
-        // создатель Врага
+        // СЃРѕР·РґР°С‚РµР»СЊ Р’СЂР°РіР°
         public class EnemyCreator : Creator
         {
             public override Character createCharacter()
