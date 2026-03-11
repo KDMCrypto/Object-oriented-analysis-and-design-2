@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 namespace lab2 {
 
@@ -11,7 +11,7 @@ namespace lab2 {
 	using namespace System::Collections::Generic;
 	using namespace System::Net::Http;
 
-	// класс для представления данных одного дня
+	// РєР»Р°СЃСЃ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РґР°РЅРЅС‹С… РѕРґРЅРѕРіРѕ РґРЅСЏ
 	public ref class DailyForecast {
 	public:
 		String^ date;
@@ -22,15 +22,14 @@ namespace lab2 {
 		int humidity;
 	};
 
-	// класс для представления данных 
+	// РєР»Р°СЃСЃ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕР±С‰РёС… РґР°РЅРЅС‹С… Рѕ РїРѕРіРѕРґРµ
 	public ref class WeatherData {
 	public:
 		String^ city;
-		// Список для хранения 7 дней прогноза
 		System::Collections::Generic::List<DailyForecast^>^ days = gcnew System::Collections::Generic::List<DailyForecast^>();
 	};
 
-	// класс кэша
+	// РєР»Р°СЃСЃ РєСЌС€Р°
 	public ref class CacheEntry {
 	public:
 		WeatherData^ data;
@@ -41,10 +40,9 @@ namespace lab2 {
 		}
 	};
 
-	// абстрактный класс для погоды
+	// Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РїРѕРіРѕРґС‹
 	public ref class WeatherService abstract {
 	public:
-		// Делегат для уведомления формы об ответе
 		delegate void WeatherCallback(WeatherData^ data, bool fromCache);
 		event WeatherCallback^ OnDataReady;
 
@@ -57,22 +55,22 @@ namespace lab2 {
 	};
 
 
-	// реальный запрос к API
+	// СЂРµР°Р»СЊРЅС‹Р№ Р·Р°РїСЂРѕСЃ Рє API
 	public ref class RealWeatherService : public WeatherService {
 	private:
 		HttpClient^ httpClient = gcnew HttpClient();
 
-		// Конвертируем название в координаты
+		// РљРѕРЅРІРµСЂС‚РёСЂСѓРµРј РЅР°Р·РІР°РЅРёРµ РІ РєРѕРѕСЂРґРёРЅР°С‚С‹
 		String^ GetCoords(String^ city) {
 			try {
 				System::Net::Http::HttpClient^ client = gcnew System::Net::Http::HttpClient();
 				String^ url = "https://geocoding-api.open-meteo.com/v1/search?name=" + city + "&count=1&language=ru&format=json";
 				String^ response = client->GetStringAsync(url)->Result;
 
-				System::Windows::Forms::MessageBox::Show("Ошибка парсинга: " + response);
+				//System::Windows::Forms::MessageBox::Show("РћС€РёР±РєР° РїР°СЂСЃРёРЅРіР°: " + response);
 
 				if (!response->Contains("\"results\":")) {
-					MessageBox::Show("Город '" + city + "' не найден. Проверьте правильность написания.", "Ошибка поиска");
+					MessageBox::Show("Р“РѕСЂРѕРґ '" + city + "' РЅРµ РЅР°Р№РґРµРЅ. РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РЅР°РїРёСЃР°РЅРёСЏ.", "РћС€РёР±РєР° РїРѕРёСЃРєР°");
 					return "error";
 				}
 
@@ -86,19 +84,19 @@ namespace lab2 {
 
 			}
 			catch (Exception^ ex) {
-				MessageBox::Show("Ошибка сети или сервиса геокодинга.", "Внимание");
+				MessageBox::Show("РћС€РёР±РєР° СЃРµС‚Рё РёР»Рё СЃРµСЂРІРёСЃР° РіРµРѕРєРѕРґРёРЅРіР°.", "Р’РЅРёРјР°РЅРёРµ");
 				return "error";
 			}
 		}
 
 	public:
 		virtual void getWeather(String^ city) override {
-			FetchDataFromApi(city, false);
+			FetchDataFromApi(city);
 		}
 
 
 	private:
-		void FetchDataFromApi(String^ city, bool detailed) {
+		void FetchDataFromApi(String^ city) {
 			try {
 				String^ url = "https://api.open-meteo.com/v1/forecast?" + GetCoords(city) +
 					"&daily=temperature_2m_max,temperature_2m_min,weather_code,windspeed_10m_max,relative_humidity_2m_max" +
@@ -109,7 +107,7 @@ namespace lab2 {
 				WeatherData^ data = gcnew WeatherData();
 				data->city = city;
 
-				// Извлекаем массивы данных
+				// РР·РІР»РµРєР°РµРј РјР°СЃСЃРёРІС‹ РґР°РЅРЅС‹С…
 				array<String^>^ dates = GetJsonArray(json, "time");
 				array<String^>^ tempsMax = GetJsonArray(json, "temperature_2m_max");
 				array<String^>^ tempsMin = GetJsonArray(json, "temperature_2m_min");
@@ -117,7 +115,7 @@ namespace lab2 {
 				array<String^>^ winds = GetJsonArray(json, "windspeed_10m_max");
 				array<String^>^ hums = GetJsonArray(json, "relative_humidity_2m_max");
 
-				// Проверяем, что данные успешно получены
+				// РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РґР°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ РїРѕР»СѓС‡РµРЅС‹
 				if (dates != nullptr && tempsMax != nullptr) {
 					for (int i = 0; i < dates->Length; i++) {
 						DailyForecast^ day = gcnew DailyForecast();
@@ -129,14 +127,14 @@ namespace lab2 {
 						day->windSpeed = Double::Parse(winds[i], System::Globalization::CultureInfo::InvariantCulture);
 						day->humidity = Int32::Parse(hums[i]);
 
-						data->days->Add(day); // Добавляем в общий список
+						data->days->Add(day);
 					}
 				}
 
 				Notify(data, false);
 			}
 			catch (Exception^ ex) {
-				System::Windows::Forms::MessageBox::Show("Ошибка парсинга: " + ex->Message);
+				System::Windows::Forms::MessageBox::Show("РћС€РёР±РєР° РїР°СЂСЃРёРЅРіР°: " + ex->Message);
 			}
 		}
 
@@ -149,7 +147,6 @@ namespace lab2 {
 			int end = json->IndexOf("]", start);
 			String^ content = json->Substring(start, end - start);
 
-			// Разделяем строку по запятым и убираем кавычки, если это массив строк (как даты)
 			return content->Replace("\"", "")->Split(',');
 		}
 	};
@@ -161,32 +158,28 @@ namespace lab2 {
 		Dictionary<String^, CacheEntry^>^ cache;
 
 	public:
-		ProxyWeather(bool vipStatus) {
-			this->realWeather = gcnew RealWeatherService();
-		}
-
 		ProxyWeather() {
 			realWeather = gcnew RealWeatherService();
 			cache = gcnew Dictionary<String^, CacheEntry^>();
 
-			// Перехватываем ответ от реального сервиса, чтобы сохранить в кэш
+			// РџРµСЂРµС…РІР°С‚С‹РІР°РµРј РѕС‚РІРµС‚ РѕС‚ СЂРµР°Р»СЊРЅРѕРіРѕ СЃРµСЂРІРёСЃР°, С‡С‚РѕР±С‹ СЃРѕС…СЂР°РЅРёС‚СЊ РІ РєСЌС€
 			realWeather->OnDataReady += gcnew WeatherCallback(this, &ProxyWeather::OnInternalDataReady);
 		}
 
 		virtual void getWeather(String^ city) override {
-			// ЛОГИКА КЭШИРОВАНИЯ
+			// Р»РѕРіРёРєР° РєСЌС€Р°
 			if (cache->ContainsKey(city)) {
 				if ((DateTime::Now - cache[city]->time).TotalMinutes < 5) {
-					Notify(cache[city]->data, true); // Выдача из кэша
+					Notify(cache[city]->data, true); // Р’С‹РґР°С‡Р° РёР· РєСЌС€Р°
 					return;
 				}
 			}
-			realWeather->getWeather(city); // Идем в сеть
+			realWeather->getWeather(city); // РРґРµРј РІ СЃРµС‚СЊ
 		}
 
 	private:
+		// РЎРѕС…СЂР°РЅСЏРµРј РІ РєСЌС€ РїСЂРё РїРѕР»СѓС‡РµРЅРёРё РёР· СЃРµС‚Рё
 		void OnInternalDataReady(WeatherData^ data, bool fromCache) {
-			// Сохраняем в кэш при получении из сети
 			cache[data->city] = gcnew CacheEntry(data);
 			Notify(data, fromCache);
 		}
