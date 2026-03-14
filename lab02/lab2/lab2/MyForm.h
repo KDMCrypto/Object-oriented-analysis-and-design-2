@@ -16,7 +16,8 @@ namespace lab2 {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	private: int selectedDays = 3;
-	private: WeatherData^ lastData = nullptr;
+	private: String^ cityName = "";
+
 	private: System::Windows::Forms::Button^ button5;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::PictureBox^ pictureBox2;
@@ -47,10 +48,7 @@ namespace lab2 {
 		MyForm(void)
 		{
 			InitializeComponent();
-
 			service = gcnew ProxyWeather();
-			service->OnDataReady += gcnew WeatherService::WeatherCallback(this, &MyForm::UpdateUI);
-
 			HighlightButton(button3);
 		}
 
@@ -88,6 +86,7 @@ namespace lab2 {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage2 = (gcnew System::Windows::Forms::TabPage());
+			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -110,7 +109,6 @@ namespace lab2 {
 			this->labelCity = (gcnew System::Windows::Forms::Label());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
-			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->tabControl1->SuspendLayout();
 			this->tabPage2->SuspendLayout();
 			this->tabPage3->SuspendLayout();
@@ -138,7 +136,7 @@ namespace lab2 {
 			this->tabControl1->Controls->Add(this->tabPage2);
 			this->tabControl1->Controls->Add(this->tabPage3);
 			this->tabControl1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->tabControl1->ItemSize = System::Drawing::Size(100, 10);
+			this->tabControl1->ItemSize = System::Drawing::Size(100, 1);
 			this->tabControl1->Location = System::Drawing::Point(0, 0);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
@@ -155,12 +153,25 @@ namespace lab2 {
 			this->tabPage2->Controls->Add(this->button2);
 			this->tabPage2->Controls->Add(this->textBoxCity);
 			this->tabPage2->Controls->Add(this->button1);
-			this->tabPage2->Location = System::Drawing::Point(4, 14);
+			this->tabPage2->Location = System::Drawing::Point(4, 5);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(850, 826);
+			this->tabPage2->Size = System::Drawing::Size(850, 835);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"tabPage2";
+			// 
+			// button6
+			// 
+			this->button6->BackColor = System::Drawing::Color::Firebrick;
+			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button6->ForeColor = System::Drawing::SystemColors::Window;
+			this->button6->Location = System::Drawing::Point(811, 6);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(36, 32);
+			this->button6->TabIndex = 5;
+			this->button6->Text = L"X";
+			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
 			// button4
 			// 
@@ -422,19 +433,6 @@ namespace lab2 {
 			this->pictureBox2->TabIndex = 4;
 			this->pictureBox2->TabStop = false;
 			// 
-			// button6
-			// 
-			this->button6->BackColor = System::Drawing::Color::Firebrick;
-			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button6->ForeColor = System::Drawing::SystemColors::Window;
-			this->button6->Location = System::Drawing::Point(811, 6);
-			this->button6->Name = L"button6";
-			this->button6->Size = System::Drawing::Size(36, 32);
-			this->button6->TabIndex = 5;
-			this->button6->Text = L"X";
-			this->button6->UseVisualStyleBackColor = false;
-			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
-			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(10, 21);
@@ -461,16 +459,20 @@ namespace lab2 {
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		String^ cityName = this->textBoxCity->Text;
-		service->getWeather(cityName);
+		cityName = this->textBoxCity->Text;
+		WeatherData^ resultData = service->getWeather(cityName);
 
-		labelCity->Text = cityName;
+		if (resultData != nullptr) {
 
-		this->tabControl1->SelectedIndex = 1;
+			// обновляем форму
+			UpdateUI(resultData);
+
+			labelCity->Text = cityName;
+			this->tabControl1->SelectedIndex = 1;
+		}
 	}
 	
-
-	String^ GetDescriptionOneDay(int code) {
+	private: String^ GetDescriptionOneDay(int code) {
 		switch (code) {
 		case 0: return "Ясно";
 		case 1: case 2: case 3: return "Облачно";
@@ -484,10 +486,8 @@ namespace lab2 {
 		}
 	}
 
-
 	// Функция вывода погоды
-	void UpdateUI(WeatherData^ data, bool fromCache) {
-		this->lastData = data;
+	private: void UpdateUI(WeatherData^ data) {
 		this->flowLayoutPanel1->SuspendLayout();
 		this->flowLayoutPanel1->Controls->Clear();
 
@@ -521,10 +521,10 @@ namespace lab2 {
 		}
 
 		this->flowLayoutPanel1->ResumeLayout();
-		this->Text = "Погода в городе " + data->city + (fromCache ? " (КЭШ)" : " (СЕТИ)");
+		this->Text = "Погода в городе " + data->city + (data->fromCache ? " (КЭШ)" : " (СЕТИ)");
 	}
 
-	void HighlightButton(Button^ activeBtn) {
+	private: void HighlightButton(Button^ activeBtn) {
 		button2->BackColor = Color::LightGray;
 		button3->BackColor = Color::LightGray;
 		button4->BackColor = Color::LightGray;
@@ -537,7 +537,6 @@ namespace lab2 {
 		this->panelOneDay->Visible = false;
 		this->flowLayoutPanel1->Visible = true;
 		HighlightButton(button4);
-		if (lastData != nullptr) UpdateUI(lastData, true);
 	}
 
 	private: System::Void button2_Click_1(System::Object^ sender, System::EventArgs^ e) {
@@ -545,20 +544,16 @@ namespace lab2 {
 		flowLayoutPanel1->Visible = false;
 		panelOneDay->Visible = true;
 		HighlightButton(button2);
-		if (lastData != nullptr) UpdateUI(lastData, true);
 	}
 	private: System::Void button3_Click_1(System::Object^ sender, System::EventArgs^ e) {
 		selectedDays = 3;
 		this->panelOneDay->Visible = false; // Скрываем панель одного дня
 		this->flowLayoutPanel1->Visible = true; // Показываем поток
 		HighlightButton(button3);
-		if (lastData != nullptr) UpdateUI(lastData, true);
 	}
 	private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->tabControl1->SelectedIndex = 0;
-
 	}
-
 	private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}

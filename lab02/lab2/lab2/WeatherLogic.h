@@ -26,6 +26,7 @@ namespace lab2 {
 	public ref class WeatherData {
 	public:
 		String^ city;
+		bool fromCache = false;
 		System::Collections::Generic::List<DailyForecast^>^ days = gcnew System::Collections::Generic::List<DailyForecast^>();
 	};
 
@@ -43,15 +44,7 @@ namespace lab2 {
 	// абстрактный класс для погоды
 	public ref class WeatherService abstract {
 	public:
-		delegate void WeatherCallback(WeatherData^ data, bool fromCache);
-		event WeatherCallback^ OnDataReady;
-
-		virtual void getWeather(String^ city) abstract; 
-
-	protected:
-		void Notify(WeatherData^ data, bool fromCache) {
-			OnDataReady(data, fromCache);
-		}
+		virtual WeatherData^ getWeather(String^ city) abstract; 
 	};
 
 
@@ -90,13 +83,13 @@ namespace lab2 {
 		}
 
 	public:
-		virtual void getWeather(String^ city) override {
-			FetchDataFromApi(city);
+		virtual WeatherData^ getWeather(String^ city) override {
+			return FetchDataFromApi(city);
 		}
 
 
 	private:
-		void FetchDataFromApi(String^ city) {
+		WeatherData^ FetchDataFromApi(String^ city) {
 			try {
 				String^ url = "https://api.open-meteo.com/v1/forecast?" + GetCoords(city) +
 					"&daily=temperature_2m_max,temperature_2m_min,weather_code,windspeed_10m_max,relative_humidity_2m_max" +
@@ -106,6 +99,7 @@ namespace lab2 {
 
 				WeatherData^ data = gcnew WeatherData();
 				data->city = city;
+				data->fromCache = false;
 
 				// Извлекаем массивы данных
 				array<String^>^ dates = GetJsonArray(json, "time");
@@ -130,11 +124,12 @@ namespace lab2 {
 						data->days->Add(day);
 					}
 				}
-
-				Notify(data, false);
+				
+				return data;
 			}
 			catch (Exception^ ex) {
 				System::Windows::Forms::MessageBox::Show("Ошибка парсинга: " + ex->Message);
+				return nullptr;
 			}
 		}
 
@@ -161,28 +156,28 @@ namespace lab2 {
 		ProxyWeather() {
 			realWeather = gcnew RealWeatherService();
 			cache = gcnew Dictionary<String^, CacheEntry^>();
-
-			// Перехватываем ответ от реального сервиса, чтобы сохранить в кэш
-			realWeather->OnDataReady += gcnew WeatherCallback(this, &ProxyWeather::OnInternalDataReady);
 		}
 
-		virtual void getWeather(String^ city) override {
+		virtual WeatherData^ getWeather(String^ city) override {
 			// логика кэша
 			if (cache->ContainsKey(city)) {
 				if ((DateTime::Now - cache[city]->time).TotalMinutes < 5) {
-					Notify(cache[city]->data, true); // Выдача из кэша
-					return;
+
+					WeatherData^ cachedData = cache[city]->data; // выдача из кэша
+					cachedData->fromCache = true;
+					return cachedData;
 				}
 			}
-			realWeather->getWeather(city); // Идем в сеть
+			WeatherData^ freshData = realWeather->getWeather(city); // Идем в сеть
+
+			// Сохраняем в кэш при получении из сети
+			if (freshData != nullptr) {
+				cache[city] = gcnew CacheEntry(freshData);
+			}
+
+			return freshData;
 		}
 
-	private:
-		// Сохраняем в кэш при получении из сети
-		void OnInternalDataReady(WeatherData^ data, bool fromCache) {
-			cache[data->city] = gcnew CacheEntry(data);
-			Notify(data, fromCache);
-		}
 	};
 
 }
