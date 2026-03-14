@@ -161,7 +161,7 @@ namespace lab2 {
 		virtual WeatherData^ getWeather(String^ city) override {
 			// логика кэша
 			if (cache->ContainsKey(city)) {
-				if ((DateTime::Now - cache[city]->time).TotalMinutes < 5) {
+				if ((DateTime::Now - cache[city]->time).TotalMinutes < 15) {
 
 					WeatherData^ cachedData = cache[city]->data; // выдача из кэша
 					cachedData->fromCache = true;

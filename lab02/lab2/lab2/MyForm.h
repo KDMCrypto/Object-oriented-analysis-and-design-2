@@ -1,4 +1,4 @@
-#include "WeatherLogic.h"
+ï»¿#include "WeatherLogic.h"
 #include "WeatherCard.h"
 #pragma once
 
@@ -127,7 +127,7 @@ namespace lab2 {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(372, 94);
 			this->button1->TabIndex = 0;
-			this->button1->Text = L"Ïîñìîòðåòü ïîãîäó";
+			this->button1->Text = L"ÐŸÐ¾ÑÐ¼Ð¾Ñ‚Ñ€ÐµÑ‚ÑŒ Ð¿Ð¾Ð³Ð¾Ð´Ñƒ";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
@@ -182,7 +182,7 @@ namespace lab2 {
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(104, 45);
 			this->button4->TabIndex = 4;
-			this->button4->Text = L"7 äíåé";
+			this->button4->Text = L"7 Ð´Ð½ÐµÐ¹";
 			this->button4->UseVisualStyleBackColor = true;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
@@ -195,7 +195,7 @@ namespace lab2 {
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(104, 45);
 			this->button3->TabIndex = 3;
-			this->button3->Text = L"3 äíÿ";
+			this->button3->Text = L"3 Ð´Ð½Ñ";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click_1);
 			// 
@@ -208,7 +208,7 @@ namespace lab2 {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(104, 45);
 			this->button2->TabIndex = 2;
-			this->button2->Text = L"1 äåíü";
+			this->button2->Text = L"1 Ð´ÐµÐ½ÑŒ";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click_1);
 			// 
@@ -320,7 +320,7 @@ namespace lab2 {
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(235, 45);
 			this->label4->TabIndex = 17;
-			this->label4->Text = L"Âëàæíîñòü, %:";
+			this->label4->Text = L"Ð’Ð»Ð°Ð¶Ð½Ð¾ÑÑ‚ÑŒ, %:";
 			// 
 			// label3
 			// 
@@ -331,7 +331,7 @@ namespace lab2 {
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(393, 45);
 			this->label3->TabIndex = 16;
-			this->label3->Text = L"Òåìïåðàòóðà âîçäóõà, °C";
+			this->label3->Text = L"Ð¢ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ð° Ð²Ð¾Ð·Ð´ÑƒÑ…Ð°, Â°C";
 			// 
 			// label2
 			// 
@@ -342,7 +342,7 @@ namespace lab2 {
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(191, 45);
 			this->label2->TabIndex = 15;
-			this->label2->Text = L"Âåòåð, ì/ñ: ";
+			this->label2->Text = L"Ð’ÐµÑ‚ÐµÑ€, Ð¼/Ñ: ";
 			// 
 			// labelWindOneDAY
 			// 
@@ -395,7 +395,7 @@ namespace lab2 {
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(172, 55);
 			this->button5->TabIndex = 2;
-			this->button5->Text = L"Âåðíóòñÿ ê ïîèñêó";
+			this->button5->Text = L"Ð’ÐµÑ€Ð½ÑƒÑ‚ÑÑ Ðº Ð¿Ð¾Ð¸ÑÐºÑƒ";
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
@@ -464,7 +464,7 @@ namespace lab2 {
 
 		if (resultData != nullptr) {
 
-			// îáíîâëÿåì ôîðìó
+			// Ð¾Ð±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ„Ð¾Ñ€Ð¼Ñƒ
 			UpdateUI(resultData);
 
 			labelCity->Text = cityName;
@@ -474,41 +474,41 @@ namespace lab2 {
 	
 	private: String^ GetDescriptionOneDay(int code) {
 		switch (code) {
-		case 0: return "ßñíî";
-		case 1: case 2: case 3: return "Îáëà÷íî";
-		case 45: case 48: return "Òóìàí";
-		case 51: case 53: case 55: return "Ìîðîñü";
-		case 61: case 63: case 65: return "Äîæäü";
-		case 66: case 67: return "Ãîëîëåä";
-		case 71: case 73: case 75: return "Ñíåã";
-		case 95: case 96: case 99: return "Ãðîçà";
-		default: return "Îñàäêè";
+		case 0: return "Ð¯ÑÐ½Ð¾";
+		case 1: case 2: case 3: return "ÐžÐ±Ð»Ð°Ñ‡Ð½Ð¾";
+		case 45: case 48: return "Ð¢ÑƒÐ¼Ð°Ð½";
+		case 51: case 53: case 55: return "ÐœÐ¾Ñ€Ð¾ÑÑŒ";
+		case 61: case 63: case 65: return "Ð”Ð¾Ð¶Ð´ÑŒ";
+		case 66: case 67: return "Ð“Ð¾Ð»Ð¾Ð»ÐµÐ´";
+		case 71: case 73: case 75: return "Ð¡Ð½ÐµÐ³";
+		case 95: case 96: case 99: return "Ð“Ñ€Ð¾Ð·Ð°";
+		default: return "ÐžÑÐ°Ð´ÐºÐ¸";
 		}
 	}
 
-	// Ôóíêöèÿ âûâîäà ïîãîäû
+	// Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð¿Ð¾Ð³Ð¾Ð´Ñ‹
 	private: void UpdateUI(WeatherData^ data) {
 		this->flowLayoutPanel1->SuspendLayout();
 		this->flowLayoutPanel1->Controls->Clear();
 
 		if (selectedDays == 1) {
-			// Ñêðûâàåì ñïèñîê, ïîêàçûâàåì ïàíåëü
+			// Ð¡ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ ÑÐ¿Ð¸ÑÐ¾Ðº, Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ð°Ð½ÐµÐ»ÑŒ
 			this->flowLayoutPanel1->Visible = false;
 			this->panelOneDay->Visible = true;
 
 			DailyForecast^ d = data->days[0];
 
-			// Çàïîëíÿåì ëåéáëû ïàíåëè
+			// Ð—Ð°Ð¿Ð¾Ð»Ð½ÑÐµÐ¼ Ð»ÐµÐ¹Ð±Ð»Ñ‹ Ð¿Ð°Ð½ÐµÐ»Ð¸
 			this->labelDateOneDAY->Text = d->date;
-			this->labelTempMaxOneDAY->Text = d->tempMax.ToString() + "°";
-			this->labelTempMinOneDAY->Text = d->tempMin.ToString() + "°";
+			this->labelTempMaxOneDAY->Text = d->tempMax.ToString() + "Â°";
+			this->labelTempMinOneDAY->Text = d->tempMin.ToString() + "Â°";
 			this->labelWindOneDAY->Text = d->windSpeed.ToString();
 			this->labelHumidityOneDAY->Text = d->humidity.ToString();
 			this->labelWeatherCodeOneDAY->Text = GetDescriptionOneDay(d->weatherCode);
 
 		}
 		else {
-			// Ïîêàçûâàåì ñïèñîê, ñêðûâàåì ïàíåëü
+			// ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ ÑÐ¿Ð¸ÑÐ¾Ðº, ÑÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ð°Ð½ÐµÐ»ÑŒ
 			this->flowLayoutPanel1->Visible = true;
 			this->panelOneDay->Visible = false;
 
@@ -521,7 +521,7 @@ namespace lab2 {
 		}
 
 		this->flowLayoutPanel1->ResumeLayout();
-		this->Text = "Ïîãîäà â ãîðîäå " + data->city + (data->fromCache ? " (ÊÝØ)" : " (ÑÅÒÈ)");
+		this->Text = "ÐŸÐ¾Ð³Ð¾Ð´Ð° Ð² Ð³Ð¾Ñ€Ð¾Ð´Ðµ " + data->city + (data->fromCache ? " (ÐšÐ­Ð¨)" : " (Ð¡Ð•Ð¢Ð˜)");
 	}
 
 	private: void HighlightButton(Button^ activeBtn) {
@@ -547,8 +547,8 @@ namespace lab2 {
 	}
 	private: System::Void button3_Click_1(System::Object^ sender, System::EventArgs^ e) {
 		selectedDays = 3;
-		this->panelOneDay->Visible = false; // Ñêðûâàåì ïàíåëü îäíîãî äíÿ
-		this->flowLayoutPanel1->Visible = true; // Ïîêàçûâàåì ïîòîê
+		this->panelOneDay->Visible = false; // Ð¡ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ð°Ð½ÐµÐ»ÑŒ Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ð´Ð½Ñ
+		this->flowLayoutPanel1->Visible = true; // ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ð¾Ñ‚Ð¾Ðº
 		HighlightButton(button3);
 	}
 	private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {

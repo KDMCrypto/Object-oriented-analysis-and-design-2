@@ -54,7 +54,7 @@ namespace lab2 {
 		WeatherData^ getWeather(String^ city) {
 			// логика кэша
 			if (cache->ContainsKey(city)) {
-				if ((DateTime::Now - cache[city]->time).TotalMinutes < 5) {
+				if ((DateTime::Now - cache[city]->time).TotalMinutes < 15) {
 
 					WeatherData^ cachedData = cache[city]->data; // выдача из кэша
 					cachedData->fromCache = true;
