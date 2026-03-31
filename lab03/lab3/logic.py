@@ -36,9 +36,9 @@ class ImageContext:
         self.markdown = ""
         self.output_path = output_path
 
-        self.image: np.Optional[np.ndarray] = None       # Сюда ляжет 'input_img'
-        self.layout_boxes: list[dict[str, any]] = []     # Сюда ляжет список 'boxes'
-        self.recognized_texts: list[dict[str, any]] = [] # Результаты OCR
+        self.image: np.Optional[np.ndarray] = None       
+        self.layout_boxes: list[dict[str, any]] = []     
+        self.recognized_texts: list[dict[str, any]] = [] 
         self.saved_images = []
 
 class OpenImageHandler(ImageHandler):
@@ -60,14 +60,14 @@ class OpenImageHandler(ImageHandler):
         #image = cv2.imread(str(path))
 
         try:
-            # Читаем файл как массив байтов (это обходит проблему путей Windows)
+            # Читаем файл как массив байтов 
             file_bytes = np.fromfile(str(path), dtype=np.uint8)
             # Декодируем массив в изображение OpenCV
             image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
         except Exception as e:
             raise ValueError(f"Ошибка при чтении файла через буфер: {e}")
         
-        # Если OpenCV вернул None, значит файл битый или это не картинка
+        
         if image is None or image.size == 0:
             raise ValueError(f"Не удалось декодировать изображение. Возможно, файл поврежден: {path}")
 
@@ -248,7 +248,6 @@ class MarkdownHandler(ImageHandler):
 
         # сортируем
         all_elements.sort(key=lambda el: (0 if el['x'] < mid_x else 1, el['y']))
-        #all_elements.sort(key=lambda el: (el['y'], el['x']))
 
         md_lines = []
         for el in all_elements:
