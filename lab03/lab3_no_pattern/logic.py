@@ -7,7 +7,7 @@ import time
 import psutil, os
 import gc
 
-# абстрактный класс обработчика
+# Общий класс обработчиков
 class ImageHandler():
     def __init__(self, layout_model, model_name):
         self.next = None
