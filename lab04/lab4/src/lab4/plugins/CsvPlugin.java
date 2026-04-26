@@ -1,0 +1,122 @@
+package lab4.plugins;
+
+import lab4.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.io.*;
+
+public class CsvPlugin implements IPluginAPI {
+    private IDatabaseService db;
+    private JPanel panel;
+
+    @Override public String getTabName() { return "Импорт/Экспорт CSV"; }
+
+    @Override
+    public void onInitialize(IDatabaseService db) {
+        this.db = db;
+        // Главная панель, которая центрирует содержимое
+        panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Создаем "карточку" для визуального объединения элементов
+        JPanel cardPanel = new JPanel();
+        cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
+        cardPanel.setBackground(Color.WHITE);
+        cardPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
+                BorderFactory.createEmptyBorder(30, 40, 30, 40)
+        ));
+
+        // Заголовок карточки
+        JLabel titleLabel = new JLabel("Синхронизация данных");
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Описание
+        JLabel descLabel = new JLabel("<html><center>Сохраните текущие результаты экспериментов<br>или загрузите данные из внешнего файла.</center></html>");
+        descLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        descLabel.setForeground(new Color(100, 100, 100));
+        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Настройка кнопок
+        Dimension buttonSize = new Dimension(220, 40);
+
+        JButton btnExport = new JButton("📤 Экспорт в CSV");
+        btnExport.setMaximumSize(buttonSize);
+        btnExport.setPreferredSize(buttonSize);
+        btnExport.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnExport.setFocusPainted(false); // Убираем некрасивую рамку фокуса
+        btnExport.addActionListener(e -> exportToCsv());
+
+        JButton btnImport = new JButton("📥 Импорт из CSV");
+        btnImport.setMaximumSize(buttonSize);
+        btnImport.setPreferredSize(buttonSize);
+        btnImport.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnImport.setFocusPainted(false);
+        btnImport.addActionListener(e -> importFromCsv());
+
+        // Собираем карточку
+        cardPanel.add(titleLabel);
+        cardPanel.add(Box.createVerticalStrut(10));
+        cardPanel.add(descLabel);
+        cardPanel.add(Box.createVerticalStrut(30)); // Отступ перед кнопками
+        cardPanel.add(btnExport);
+        cardPanel.add(Box.createVerticalStrut(15)); // Отступ между кнопками
+        cardPanel.add(btnImport);
+
+        // Добавляем карточку на главную панель
+        panel.add(cardPanel);
+    }
+
+    @Override public void onExperimentSelected(int runId) { /* Нет UI элементов, зависящих от выбора */ }
+
+    @Override public JPanel getPanel() { return panel; }
+
+    private void exportToCsv() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+        if (fileChooser.showSaveDialog(panel) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".csv")) {
+                file = new File(file.getParentFile(), file.getName() + ".csv");
+            }
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println("Model,F1,Precision,Recall,Accuracy,Time");
+                for (Experiment e : db.getAllExperiments()) {
+                    writer.printf("%s,%.3f,%.3f,%.3f,%.3f,%d%n",
+                            e.getModelName(), e.getF1(), e.getPrecision(),
+                            e.getRecall(), e.getAccuracy(), e.getTrainingTime());
+                }
+                JOptionPane.showMessageDialog(panel, "Экспорт успешно завершен!");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(panel, "Ошибка записи: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void importFromCsv() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+        if (fileChooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            int count = 0;
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line = reader.readLine(); // Пропускаем заголовок
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length >= 6) {
+                        db.addExperiment(
+                                parts[0], Double.parseDouble(parts[1]), Double.parseDouble(parts[2]),
+                                Double.parseDouble(parts[3]), Double.parseDouble(parts[4]), Integer.parseInt(parts[5])
+                        );
+                        count++;
+                    }
+                }
+                JOptionPane.showMessageDialog(panel, "Успешно импортировано " + count + " записей!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Ошибка чтения или неверный формат: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+}

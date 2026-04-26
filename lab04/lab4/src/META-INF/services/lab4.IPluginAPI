@@ -1,0 +1,3 @@
+lab4.plugins.StatsPlugin
+lab4.plugins.ChartsPlugin
+lab4.plugins.CsvPlugin
